@@ -1,52 +1,39 @@
 package a3;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class CardPile {
-  private Card[] cards;
-  private int numCards;
+  private ArrayList<Card> cards;
+
   public CardPile(){
-    this.cards = new Card[52];
-    this.numCards = 0;
+    this.cards = new ArrayList<Card>();
   }
 
   public int getNumCards(){
-    return this.numCards;
-  }
-
-  public void addToBottom(Card c){
-    this.cards[this.numCards] = c;
-    this.numCards++;
+    return this.cards.size();
   }
 
   public boolean isEmpty(){
-    return this.numCards == 0;
+    return this.cards.isEmpty();
+  }
+
+  public void addToBottom(Card c){
+    this.cards.add(c);
   }
 
   public Card get(int i){
-    if (i > this.numCards && i < this.cards.length){
-      return null;
-    }
-
-    return this.cards[i];
+    return this.cards.get(i);
   }
 
   public Card remove(int i){
-    if (this.isEmpty()){
-      return null;
-    }
-
-    Card c = this.get(i);
-
-    for (int j = i+1; j < this.numCards; j++){
-      this.cards[j-1] = this.get(j);
-    }
-
-    this.numCards--;
-    return c;
+    return this.cards.remove(i);
   }
 
+// need to override equals for Card object
   public int find(Suit s, Value v){
-    for (int i = 0; i < this.numCards; i++){
-      if (this.cards[i].getSuit() == s && this.cards[i].getValue() == v){
+    for (int i = 0; i < this.getNumCards(); i++){
+      if (this.cards.get(i).getSuit() == s && this.cards.get(i).getValue() == v){
         return i;
       }
     }
@@ -56,7 +43,7 @@ public class CardPile {
   public String toString(){
     StringBuilder returnString = new StringBuilder();
 
-    for (int i =0; i < this.numCards; i++){
+    for (int i =0; i < this.getNumCards(); i++){
       String cardString = this.get(i).toString();
       returnString.append(i).append(".").append(cardString).append(" ");
     }
@@ -73,8 +60,18 @@ public class CardPile {
         cardPile.addToBottom(c);
       }
     }
-    UtilityCode.shuffle(cardPile.cards, cardPile.numCards);
 
+    Collections.shuffle(cardPile.cards);
+    return cardPile;
+  }
+
+  public static CardPile makeFullDeck(int n){
+    CardPile cardPile = new CardPile();
+
+    for (int i = 0; i < n; i++){
+      CardPile temp = makeFullDeck();
+      cardPile.cards.addAll(temp.cards);
+    }
     return cardPile;
   }
 }
