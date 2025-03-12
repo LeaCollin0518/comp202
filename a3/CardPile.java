@@ -30,7 +30,7 @@ public class CardPile {
     return this.cards.remove(i);
   }
 
-// need to override equals for Card object
+// TODO - need to override equals for Card object
   public int find(Suit s, Value v){
     for (int i = 0; i < this.getNumCards(); i++){
       if (this.cards.get(i).getSuit() == s && this.cards.get(i).getValue() == v){
